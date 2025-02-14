@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Highlight Pakistan with Leaflet</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map { height: 100vh; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Initialize map centered over Pakistan
+    const map = L.map('map').setView([30, 70], 5);
+    
+    // Add OpenStreetMap tile layer (free)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+    
+    // Fetch and add Pakistan GeoJSON boundary
+    fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries/PAK.geo.json')
+      .then(response => response.json())
+      .then(geojson => {
+        L.geoJSON(geojson, {
+          style: { color: "#ff0000", weight: 2, fillOpacity: 0.1 }
+        }).addTo(map);
+      })
+      .catch(error => console.error('GeoJSON load error:', error));
+  </script>
+</body>
+</html>
